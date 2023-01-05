@@ -1,0 +1,10 @@
+.metals
+.vscode
+.DS_Store
+scripts/cluster.py
+scripts/*.sh
+figures/
+nb/
+*-out.txt
+*-report.csv
+*-report.json
