@@ -2,6 +2,15 @@
 
 LHBench is a benchmark for [LakeHouse](https://www.cidrdb.org/cidr2021/papers/cidr2021_paper17.pdf) storage systems. These systems extend traditional Data Lake storage with support for ACID transactions and enable a wide range of workloads from data warehousing to machine learning in one place. LakeHouse architectures are widely adopted in industry at companies such as Uber, Meta, and Netflix. Our benchmark runs on AWS EMR and currently supports three LakeHouse storage engines: [Apache Iceberg](http://iceberg.apache.org), [Apache Hudi](http://hudi.apache.org), and [Delta Lake](http://delta.io). This benchmark is meant to enable simple and reproducible comparison of storage engines in this rapidly moving space.
 
+# Workload
+Our goal with this benchmark is to study end-to-end workloads and understand the technical differences between LakeHouse systems. We chose to adapt the existing TPC-DS data warehouse benchmark to the LakeHouse setting wherever possible to exercise these differences. This benchmark is made up of four tests, three of which use the TPC-DS dataset and a subset of the TPC-DS queries. The last test, micro merge, performs inserts and updates to a synthetic dataset at a fine granularity. The TPC-DS Refresh and Micro Merge tests are meant to exercise differences in UPDATE implementations, Large File Count TPC-DS exercises differences in metadata handling, and TPC-DS exercises end-to-end performance.
+
+The benchmark is made up of four tests:
+* 3TB TPC-DS
+* Large File Count TPC-DS
+* TPC-DS Refresh
+* Micro Merge Comparison
+
 # Benchmarks 
 
 ## Overview
