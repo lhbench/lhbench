@@ -1,3 +1,7 @@
+# Introduction
+
+LHBench is a benchmark for LakeHouse storage systems. These systems extend traditional Data Lake storage with support for ACID transactions and enable a wide range of workloads from data warehousing to machine learning in one place. LakeHouse architectures are widely adopted in industry at companies such as Uber, Meta, and Netflix. Our benchmark runs on AWS EMR and currently supports three LakeHouse storage engines: Apache Iceberg, Apache Hudi, and Delta Lake. This benchmark is meant to enable simple and reproducible comparison of storage engines in this rapidly moving space.
+
 # Benchmarks 
 
 ## Overview
