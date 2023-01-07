@@ -2,6 +2,8 @@
 
 LHBench is a benchmark for [LakeHouse](https://www.cidrdb.org/cidr2021/papers/cidr2021_paper17.pdf) storage systems. These systems extend traditional Data Lake storage with support for ACID transactions and enable a wide range of workloads from data warehousing to machine learning in one place. LakeHouse architectures are widely adopted in industry at companies such as Uber, Meta, and Netflix. Our benchmark runs on AWS EMR and currently supports three LakeHouse storage engines: [Apache Iceberg](http://iceberg.apache.org), [Apache Hudi](http://hudi.apache.org), and [Delta Lake](http://delta.io). This benchmark is meant to enable simple and reproducible comparison of storage engines in this rapidly moving space.
 
+[CIDR paper](https://www.cidrdb.org/cidr2023/papers/p92-jain.pdf)
+
 # Workload
 Our goal with this benchmark is to study end-to-end workloads and understand the technical differences between LakeHouse systems. We chose to adapt the existing TPC-DS data warehouse benchmark to the LakeHouse setting wherever possible to exercise these differences. This benchmark is made up of four tests, three of which use the TPC-DS dataset and a subset of the TPC-DS queries. The last test, micro merge, performs inserts and updates to a synthetic dataset at a fine granularity. The TPC-DS Refresh and Micro Merge tests are meant to exercise differences in UPDATE implementations, Large File Count TPC-DS exercises differences in metadata handling, and TPC-DS exercises end-to-end performance.
 
@@ -12,7 +14,7 @@ The benchmark is made up of four tests:
 * Micro Merge Comparison
 
 # Results | December 2022
-All experiments were run using Apache Spark on AWS EMR 6.9.0 storing data in AWS S3 using Delta Lake 2.2.0, Apache Hudi 0.12.0, and Apache Iceberg 1.1.0. This version of EMR is based on Apache Spark 3.3.0. More details on these runs can be found in the paper (TODO link to paper when available).
+All experiments were run using Apache Spark on AWS EMR 6.9.0 storing data in AWS S3 using Delta Lake 2.2.0, Apache Hudi 0.12.0, and Apache Iceberg 1.1.0. This version of EMR is based on Apache Spark 3.3.0. More details on these runs can be found in the [paper](https://www.cidrdb.org/cidr2023/papers/p92-jain.pdf).
 				
 ## 3TB TPC-DS Results
 
