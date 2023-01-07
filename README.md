@@ -33,6 +33,16 @@ We observed that merges in Hudi MoR were 1.3× faster than in Hudi CoW at the co
 
 The micro merge test uses a synthetic dataset of four columns in a single table. In this run we have generated a 100GB data set and we compare merge time and post-merge query time for a range of update sizes. The update sizes range from 0.0001% of the data set size to 0.1% of the data set size. We see that MoR merge time starts to outperform CoW at 100,000 rows updated. We also see, as expected, that the query latency after a merge is much higher for merge-on-read than copy-on-write due to read amplification.
 
+# FAQ
+
+### Have you run this benchmark on a traditional data warehouse?
+
+This benchmark is aimed at highlighting design choices between specifically LakeHouse storage systems. Many data warehouses have had TPC-DS and TPC-DS Refresh run against them which could be used as points of comparison, but the large file count and micro merge benchmarks are meant to highlight aspects of LakeHouse system design that don’t apply to traditional data warehouses.
+
+### What are CoW and MoR?
+
+These are different approaches to implementing updates. The Copy-On-Write (CoW) strategy identifies the files containing records that need to be updated and eagerly rewrites them to new files with the updated data, thus incurring a high write amplification but no read amplification. The Merge-On-Read (MoR) strategy does not rewrite files. It instead writes out information about record-level changes in additional files and defers the reconciliation until query time, thus producing lower write amplification (i.e., faster writes than CoW) but higher read amplification (i.e., slower reads than CoW).
+
 # Benchmarks 
 
 ## Overview
