@@ -24,14 +24,20 @@ Our end-to-end comparison of Delta, Hudi, and Iceberg with 3TB TPC-DS runs each 
 					
 ## Large File Count TPC-DS Results
 
+![large-file-count-december2022](/images/large-file-count-dec2022.png)
+
 The large file count test compares metadata processing strategies across LakeHouses. We break the store_sales TPC-DS table up into 10MB files and experiment with 1,000 through 200,000 files. We see better performance from Delta Lake for large file counts. Performance is 7x-20x better for Delta in the 200,000 files case.
 
 ## TPC-DS Refresh Results
+
+![tpcds-refresh-december2022](/images/tpcds-refresh-dec2022.png)
 
 This test first loads the 100 GB TPC-DS base dataset, then runs five sample queries (Q3, Q9, Q34, Q42, and Q59). It then runs a total of 10 refreshes (each for 3% of the original dataset) using the MERGE INTO operation to update rows. Finally, it reruns the five sample queries on the updated tables. Due to S3 connection timeouts in Iceberg 1.1.0 MoR we also show results for Iceberg 0.14.0 MoR. 		 	 	 				
 We observed that merges in Hudi MoR were 1.3× faster than in Hudi CoW at the cost of 3.2× slower queries post-merge. Both Hudi CoW and MoR had poor write performance during the initial load due to additional pre-processing to distribute the data by key and rebalance write file sizes. Delta’s performance on both merges and reads was competitive, despite using only CoW, due to a combination of generating fewer files, faster scans, and a more optimized MERGE command. Merges in Iceberg version 0.14.0 with MoR were 1.4× faster than CoW. Post-merge query performance remains similar between table modes. 
 					
 ## Micro Merge Results
+
+![micro-merge-december2022](/images/micro-merge-dec2022.png)
 
 The micro merge test uses a synthetic dataset of four columns in a single table. In this run we have generated a 100GB data set and we compare merge time and post-merge query time for a range of update sizes. The update sizes range from 0.0001% of the data set size to 0.1% of the data set size. We see that MoR merge time starts to outperform CoW at 100,000 rows updated. We also see, as expected, that the query latency after a merge is much higher for merge-on-read than copy-on-write due to read amplification.
 
