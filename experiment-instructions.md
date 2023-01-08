@@ -301,7 +301,7 @@ Run all steps above first to set up an EMR cluster appropriately.  Then, for eac
         --benchmark <SIZE>-files-sorted-<SYSTEM>-load
     ```
 
-2. Run queries on the system's tables:
+2. Run queries on the loaded data:
     ```bash
     ./run-benchmark.py \
         --cluster-hostname <HOSTNAME> \
