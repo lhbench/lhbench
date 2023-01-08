@@ -287,6 +287,35 @@ Compare the results using the generated JSON files.
 
 _________________
 
+### Run File Count Benchmark
+Run all steps above first to set up an EMR cluster appropriately.  Then, for each lakehouse system used in this benchmark (delta, iceberg) and each size (1k, 50k, 100k, 200k), run:
+
+1. Load data into that system's tables:
+    ```bash
+    ./run-benchmark.py \
+        --cluster-hostname <HOSTNAME> \
+        -i <PEM_FILE> \
+        --ssh-user <SSH_USER> \
+        --benchmark-path <BENCHMARK_PATH> \
+        --cloud-provider <CLOUD_PROVIDER> \
+        --benchmark <SIZE>-files-sorted-<SYSTEM>-load
+    ```
+
+2. Run queries on the system's tables:
+    ```bash
+    ./run-benchmark.py \
+        --cluster-hostname <HOSTNAME> \
+        -i <PEM_FILE> \
+        --ssh-user <SSH_USER> \
+        --benchmark-path <BENCHMARK_PATH> \
+        --cloud-provider <CLOUD_PROVIDER> \
+        --benchmark <SIZE>-files-sorted-<SYSTEM>-query
+    ```
+
+Compare the results using the generated JSON files.
+
+_________________
+
 
 ## Running TPC-DS Refresh benchmark
 
