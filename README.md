@@ -1,4 +1,4 @@
-<img style="float: right;" src="images/lakehouse-bench-painted-cover-photo.png" width=425/>
+<img style="float: right;" src="images/lakehouse-bench-painted-cover-photo.png" width=350/>
 
 # Introduction
 
