@@ -18,21 +18,18 @@ All experiments were run using Apache Spark on AWS EMR 6.9.0 storing data in AWS
 				
 ## 3TB TPC-DS Results
 
-![3tb-tpcds-december2022](/images/3tb-tpcds-dec2022.png | width=50)
 <img src="images/3tb-tpcds-dec2022.png" width=600/>
 
 Our end-to-end comparison of Delta, Hudi, and Iceberg with 3TB TPC-DS runs each query three times and reports the median runtime. The results show Hudi is almost ten times slower for data load. This is because Hudi is optimized for keyed upserts, not bulk data ingestion, and does expensive pre-processing during data loading including key uniqueness checks and key redistribution. Our query runs showed that overall, TPC-DS ran 1.4× faster on Delta Lake than on Hudi and 1.7× faster on Delta Lake than on Iceberg. We highlight some of the specific queries where the differences were pronounced. Upon investigation we found that the query execution time differences are explained almost entirely by data reading time. You can find a more detailed discussion in the [paper](https://www.cidrdb.org/cidr2023/papers/p92-jain.pdf).
 					
 ## Large File Count TPC-DS Results
 
-![large-file-count-december2022](/images/large-file-count-dec2022.png | width=600)
 <img src="images/large-file-count-dec2022.png" width=600/>
 
 The large file count test compares metadata processing strategies across LakeHouses. We break the store_sales TPC-DS table up into 10MB files and experiment with 1,000 through 200,000 files. We see better performance from Delta Lake for large file counts. Performance is 7x-20x better for Delta in the 200,000 files case.
 
 ## TPC-DS Refresh Results
 
-![tpcds-refresh-december2022](/images/tpcds-refresh-dec2022.png)
 <img src="images/tpcds-refresh-dec2022.png" width=600/>
 
 This test first loads the 100 GB TPC-DS base dataset, then runs five sample queries (Q3, Q9, Q34, Q42, and Q59). It then runs a total of 10 refreshes (each for 3% of the original dataset) using the MERGE INTO operation to update rows. Finally, it reruns the five sample queries on the updated tables. Due to S3 connection timeouts in Iceberg 1.1.0 MoR we also show results for Iceberg 0.14.0 MoR. 		 	 	 				
@@ -40,7 +37,6 @@ We observed that merges in Hudi MoR were 1.3× faster than in Hudi CoW at the co
 					
 ## Micro Merge Results
 
-![micro-merge-december2022](/images/micro-merge-dec2022.png)
 <img src="images/micro-merge-dec2022.png" width=600/>
 
 The micro merge test uses a synthetic dataset of four columns in a single table. In this run we have generated a 100GB data set and we compare merge time and post-merge query time for a range of update sizes. The update sizes range from 0.0001% of the data set size to 0.1% of the data set size. We see that MoR merge time starts to outperform CoW at 100,000 rows updated. We also see, as expected, that the query latency after a merge is much higher for merge-on-read than copy-on-write due to read amplification.
