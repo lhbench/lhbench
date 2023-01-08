@@ -19,7 +19,7 @@ All experiments were run using Apache Spark on AWS EMR 6.9.0 storing data in AWS
 ## 3TB TPC-DS Results
 
 ![3tb-tpcds-december2022](/images/3tb-tpcds-dec2022.png | width=50)
-<img src="images/3tb-tpcds-dec2022.png" width=500 height=500/>
+<img src="images/3tb-tpcds-dec2022.png" width=500/>
 
 Our end-to-end comparison of Delta, Hudi, and Iceberg with 3TB TPC-DS runs each query three times and reports the median runtime. The results show Hudi is almost ten times slower for data load. This is because Hudi is optimized for keyed upserts, not bulk data ingestion, and does expensive pre-processing during data loading including key uniqueness checks and key redistribution. Our query runs showed that overall, TPC-DS ran 1.4× faster on Delta Lake than on Hudi and 1.7× faster on Delta Lake than on Iceberg. We highlight some of the specific queries where the differences were pronounced. Upon investigation we found that the query execution time differences are explained almost entirely by data reading time. You can find a more detailed discussion in the [paper](https://www.cidrdb.org/cidr2023/papers/p92-jain.pdf).
 					
