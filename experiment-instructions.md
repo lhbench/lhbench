@@ -50,68 +50,6 @@ These will be needed to run the workloads in this framework.
 #### Prepare S3 bucket
 Create a new S3 bucket (or use an existing one) which is in the same region as your EMR cluster.
 
-_________________
-
-### Configure cluster with Google Cloud Platform
-
-#### Prerequisites
-- A GCP account with necessary permissions to do the following:
-  - Manage Dataproc clusters for running the benchmark
-  - Manage Dataproc Metastore instances
-  - Read and write to a GCS bucket from the Dataproc cluster
-- A GCS bucket which will be used to generate the TPC-DS data.
-- A machine which has access to the GCP setup and where this repository has been downloaded or cloned.
-- SSH keys for a user which will be used to access the master node. The user's SSH key can be either [a project-wide key](https://cloud.google.com/compute/docs/connect/add-ssh-keys#add_ssh_keys_to_project_metadata) 
-  or assigned to the [master node](https://cloud.google.com/compute/docs/connect/add-ssh-keys#after-vm-creation) only.
-- Ideally, all GCP components used in benchmark should be in the same location (Storage bucket, Dataproc Metastore service and Dataproc cluster).
-
-#### Prepare GCS bucket
-Create a new GCS bucket (or use an existing one) which is in the same region as your Dataproc cluster.
-
-#### Create Dataproc Metastore
-You can create [Dataproc metastore](https://cloud.google.com/dataproc-metastore/docs/create-service)
-either via Web Console or gcloud command.
-
-Sample create command:
-```bash
-gcloud metastore services create dataproc-metastore-for-benchmarks \
-    --location=<region> \
-    --tier=enterprise
-```
-
-#### Create Dataproc cluster
-Here are the specifications of the Dataproc cluster required for running benchmarks.
-- Image version >= 2.0 having Apache Spark 3.1
-- Master - n2-highmem-8 (8 vCPU, 64 GB memory)
-- Workers - 16 x n2-highmem-8 (or just 2 workers if you are just testing by running the 1GB benchmark).
-- The cluster connects to the Dataproc Metastore.
-- Same region and subnet as those of the Dataproc Metastore and GCS bucket.
-- No autoscaling.
-
-Sample create command:
-```bash
-gcloud dataproc clusters create delta-performance-benchmarks-cluster \
-    --project <project-name> \
-    --enable-component-gateway \
-    --region <region> \
-    --zone <zone> \
-    --subnet default \
-    --master-machine-type n2-highmem-8 \
-    --master-boot-disk-type pd-ssd \
-    --master-boot-disk-size 100 \
-    --num-master-local-ssds 4 \
-    --master-local-ssd-interface NVME \
-    --num-workers 16 \
-    --worker-machine-type n2-highmem-8 \
-    --worker-boot-disk-type pd-ssd \
-    --worker-boot-disk-size 100 \
-    --num-worker-local-ssds 4 \
-    --worker-local-ssd-interface NVME \
-    --dataproc-metastore projects/<project-name>/locations/<region>/services/dataproc-metastore-for-benchmarks \
-    --enable-component-gateway \
-    --image-version 2.0-debian10
-```
-
 #### Input data
 The benchmark is run using the raw TPC-DS data which has been provided as Apache Parquet files. There are two
 predefined datasets of different size, 1GB and 3TB, located in `s3://devrel-delta-datasets/tpcds-2.13/tpcds_sf1_parquet/`
@@ -443,7 +381,7 @@ $ python run-benchmark.py \
 
 _________________
 
-## Running refresh microbenchmark
+## Running Merge Microbenchmark
 
 ### Configuring S3 bucket
 
@@ -458,7 +396,7 @@ For all commands, set your EMR master hostname to `$CLUSTER_HOSTNAME` and set th
 
 For all microbencmark commands, set the percentage of updated rows with the `$PCT` environment variable. For example, to choose 0.1%,run `export PCT=0.001`.
 
-#### Refresh microbenchark: Delta
+#### Merge microbenchark: Delta
 
 ```bash
 $ export RUNID=$(date +%Y%m%d%H%M%S)
@@ -474,7 +412,7 @@ $ python run-benchmark.py \
     --source-percent $PCT
 ```
 
-#### Refresh microbenchark: Hudi CoW
+#### Merge microbenchark: Hudi CoW
 
 ```bash
 $ export RUNID=$(date +%Y%m%d%H%M%S)
@@ -490,7 +428,7 @@ $ python run-benchmark.py \
     --source-percent $PCT
 ```
 
-#### Refresh microbenchark: Hudi MoR
+#### Merge microbenchark: Hudi MoR
 
 ```bash
 $ export RUNID=$(date +%Y%m%d%H%M%S)
@@ -506,7 +444,7 @@ $ python run-benchmark.py \
     --source-percent $PCT
 ```
 
-#### Refresh microbenchark: Iceberg CoW
+#### Merge microbenchark: Iceberg CoW
 
 ```bash
 $ export RUNID=$(date +%Y%m%d%H%M%S)
@@ -522,7 +460,7 @@ $ python run-benchmark.py \
     --source-percent $PCT
 ```
 
-#### Refresh microbenchark: Iceberg MoR
+#### Merge microbenchark: Iceberg MoR
 
 ```bash
 $ export RUNID=$(date +%Y%m%d%H%M%S)
