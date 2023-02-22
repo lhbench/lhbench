@@ -4,16 +4,14 @@
 
 LHBench is a benchmark for [Lakehouse](https://www.cidrdb.org/cidr2021/papers/cidr2021_paper17.pdf) storage systems. These systems extend traditional Data Lake storage with support for ACID transactions and enable a wide range of workloads from data warehousing to machine learning in one place. LakeHouse architectures are widely adopted in industry at companies such as Uber, Meta, and Netflix. Our benchmark runs on AWS EMR and currently supports three Lakehouse storage engines: [Apache Iceberg](http://iceberg.apache.org), [Apache Hudi](http://hudi.apache.org), and [Delta Lake](http://delta.io). This benchmark is meant to enable simple and reproducible comparison of storage engines in this rapidly moving space.
 
-[CIDR paper](https://www.cidrdb.org/cidr2023/papers/p92-jain.pdf)&nbsp;&nbsp;&nbsp;&nbsp;[Github repo](https://github.com/lhbench/lhbench)
-
 # Workload
 Our goal with this benchmark is to study end-to-end workloads and understand the technical differences between Lakehouse systems. We chose to adapt the existing TPC-DS data warehouse benchmark to the Lakehouse setting wherever possible to exercise these differences. This benchmark is made up of four tests, three of which use the TPC-DS dataset and a subset of the TPC-DS queries. The last test, micro merge, performs inserts and updates to a synthetic dataset at a fine granularity. The TPC-DS Refresh and Micro Merge tests are meant to exercise differences in UPDATE implementations, Large File Count TPC-DS exercises differences in metadata handling, and TPC-DS exercises end-to-end performance.
 
 The benchmark is made up of four tests:
-* 3TB TPC-DS
-* Large File Count TPC-DS
+* TPC-DS
 * TPC-DS Refresh
-* Micro Merge Comparison
+* Merge Microbenchmark
+* Large File Count
 
 # Results | December 2022
 All experiments were run using Apache Spark on AWS EMR 6.9.0 storing data in AWS S3 using Delta Lake 2.2.0, Apache Hudi 0.12.0, and Apache Iceberg 1.1.0. This version of EMR is based on Apache Spark 3.3.0. More details on these runs can be found in the [paper](https://www.cidrdb.org/cidr2023/papers/p92-jain.pdf).
@@ -55,4 +53,7 @@ This benchmark is aimed at highlighting design choices between specifically Lake
 
 These are different approaches to implementing updates. The Copy-On-Write (CoW) strategy identifies the files containing records that need to be updated and eagerly rewrites them to new files with the updated data, thus incurring a high write amplification but no read amplification. The Merge-On-Read (MoR) strategy does not rewrite files. It instead writes out information about record-level changes in additional files and defers the reconciliation until query time, thus producing lower write amplification (i.e., faster writes than CoW) but higher read amplification (i.e., slower reads than CoW).
 
-# [Instructions](experiment-instructions.md) To Try This Benchmark Yourself
+
+# More Information
+- [Research paper](https://www.cidrdb.org/cidr2023/papers/p92-jain.pdf) in [Conference on Innovative Data Systems Research (CIDR) 2023]([url](https://www.cidrdb.org/cidr2022/index.html))
+- [Github repository](https://github.com/lhbench/lhbench) with [instructions]([experiment-instructions.md](https://github.com/lhbench/lhbench/blob/main/experiment-instructions.md)) to try this benchmark yourself
